@@ -23,7 +23,7 @@ supabase/schema.sql           Veritabanı tabloları ve güvenlik kuralları
 
 ## İçerik motoru akışı
 
-1. **Taslak üret** iş akışı (Pzt/Çar/Cum 09:00 ya da elle): marka profili ve fikir havuzu okunur, Claude Türkçe ve İngilizce taslaklar üretir, taslaklar Supabase'e yazılır ve e-postana gelir.
+1. **Taslak üret** iş akışı (Pzt/Çar/Cum 09:00 ya da elle): marka profili ve fikir havuzu okunur, yapay zekâ (varsayılan Gemini) Türkçe ve İngilizce taslaklar üretir, taslaklar Supabase'e yazılır ve e-postana gelir.
 2. Sen sitedeki **Panel**'den taslağı düzenler, dili ve zamanı seçip onaylarsın.
 3. **Onaylıları yayınla** iş akışı (30 dakikada bir): zamanı gelen onaylı gönderileri X'te paylaşır. X anahtarları yoksa bu adım atlanır.
 
