@@ -67,25 +67,21 @@
   function viewSetup() {
     return `
       <div class="narrow">
-        <section class="hero">
-          <span class="eyebrow">Panel</span>
-          <h1>Panel henüz bağlanmadı</h1>
-          <p class="lead">Panelin çalışması için Supabase projesinin adresi ve herkese açık (anon) anahtarı <code>assets/js/config.js</code> dosyasına yazılmalı.</p>
-        </section>
-        <div class="callout">Kurulum adımları README dosyasında ve İçerik Motoru sayfasında.</div>
+        <div class="card">
+          <h3>Panel henüz bağlanmadı</h3>
+          <p class="muted">Panelin çalışması için Supabase projesinin adresi ve herkese açık (anon) anahtarı <code>assets/js/config.js</code> dosyasına yazılmalı.</p>
+          <a class="btn secondary" href="#/faz/2">Kurulum adımları</a>
+        </div>
       </div>`;
   }
 
   function viewLogin(sent) {
     return `
-      <div class="narrow">
-        <section class="hero">
-          <span class="eyebrow">Panel</span>
-          <h1>Giriş</h1>
-          <p class="lead">E-postana tek kullanımlık bir giriş bağlantısı gönderilecek. Şifre yok.</p>
-        </section>
-        ${sent ? `<div class="callout">Bağlantı gönderildi. E-postanı kontrol et ve bağlantıyı <strong>bu tarayıcıda</strong> aç.</div>` : `
+      <div class="narrow login-box">
+        ${sent ? `<div class="card"><h3>Bağlantı gönderildi</h3><p class="muted">E-postanı kontrol et ve bağlantıyı <strong>bu tarayıcıda</strong> aç. Gelen kutunda yoksa spam klasörüne bak.</p></div>` : `
         <form id="login-form" class="card">
+          <h3>Giriş</h3>
+          <p class="muted small">E-postana tek kullanımlık bir giriş bağlantısı gönderilir. Şifre yok.</p>
           <div class="field">
             <label for="login-email">E-posta</label>
             <input type="text" id="login-email" inputmode="email" autocomplete="email" value="${esc(CFG.ownerEmail || "")}">
@@ -104,10 +100,7 @@
       ["profile", "Marka profili"]
     ];
     return `
-      <section class="hero" style="padding-bottom:0">
-        <span class="eyebrow">Panel · ${esc(email)}</span>
-        <h1>İçerik motoru</h1>
-      </section>
+      <p class="muted small">Giriş yapan: ${esc(email)}</p>
       <nav class="tabs">
         ${tabs.map(([k, l]) => `<button data-tab="${k}" class="${tab === k ? "active" : ""}">${l}</button>`).join("")}
         <button data-action="logout" class="ghost">Çıkış</button>
@@ -316,9 +309,16 @@
       const email = root.querySelector("#login-email").value.trim();
       const { error } = await client.auth.signInWithOtp({
         email,
-        options: { emailRedirectTo: location.origin + location.pathname, shouldCreateUser: true }
+        options: { emailRedirectTo: location.origin + location.pathname, shouldCreateUser: false }
       });
-      if (error) return toast(error.message, true);
+      if (error) {
+        const msg = /signup|not allowed|not found/i.test(error.message)
+          ? "Bu e-posta Supabase'de kayıtlı değil. Supabase → Authentication → Users → Add user ile ekle."
+          : /rate|seconds/i.test(error.message)
+            ? "Çok sık deneme yapıldı. Bir dakika bekleyip tekrar dene."
+            : error.message;
+        return toast(msg, true);
+      }
       root.innerHTML = viewLogin(true);
     } else if (e.target.id === "idea-form") {
       const text = root.querySelector("#idea-text").value.trim();

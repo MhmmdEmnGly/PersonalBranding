@@ -15,7 +15,7 @@ assets/js/app.js              Sayfalar, yönlendirme, yerel kayıt
 assets/js/data/modules.js     Müfredat içeriği ve genel tavsiyeler
 assets/js/panel.js            İçerik motoru onay paneli (#/panel)
 assets/js/config.js           Panelin Supabase ayarları (herkese açık değerler)
-engine/generate.py            Claude ile taslak üretir, Supabase'e yazar, e-posta gönderir
+engine/generate.py            Gemini (ya da Claude) ile taslak üretir, Supabase'e yazar, e-posta gönderir
 engine/publish.py             Onaylı ve zamanı gelen taslakları X'te paylaşır
 supabase/schema.sql           Veritabanı tabloları ve güvenlik kuralları
 .github/workflows/            Zamanlanmış GitHub Actions iş akışları
@@ -33,7 +33,7 @@ supabase/schema.sql           Veritabanı tabloları ve güvenlik kuralları
 Settings → Pages → Source: **Deploy from a branch** → Branch: `main`, klasör `/ (root)` → Save.
 
 ### 2. Supabase
-1. Yeni proje oluştur.
+1. Yeni proje oluştur. Authentication → Users → Add user ile kendi e-postanı ekle (Auto Confirm).
 2. SQL Editor → `supabase/schema.sql` içeriğini yapıştır → Run.
 3. Authentication → URL Configuration:
    - Site URL: `https://mhmmdemngly.github.io/PersonalBranding/`
@@ -49,7 +49,7 @@ Settings → Secrets and variables → Actions → **New repository secret**:
 
 | Ad | Değer |
 |---|---|
-| `ANTHROPIC_API_KEY` | console.anthropic.com → API Keys |
+| `GEMINI_API_KEY` | aistudio.google.com → Get API key (ücretsiz katman) |
 | `SUPABASE_URL` | Supabase Project URL |
 | `SUPABASE_SERVICE_KEY` | Supabase → Project Settings → API → **service_role / secret** key |
 | `GMAIL_USER` | Gönderen Gmail adresi |
@@ -58,6 +58,10 @@ Settings → Secrets and variables → Actions → **New repository secret**:
 | `X_API_KEY`, `X_API_SECRET`, `X_ACCESS_TOKEN`, `X_ACCESS_SECRET` | (Sonra) developer.x.com → uygulamanın Read and Write anahtarları |
 
 İsteğe bağlı **Variables** sekmesi: `PANEL_URL`, `DRAFT_COUNT` (varsayılan 5).
+
+### Yapay zekâ sağlayıcısını değiştirmek
+Varsayılan Gemini. Claude için: Secrets → `ANTHROPIC_API_KEY` ekle, Variables → `LLM_PROVIDER` = `claude` ekle. Kodda değişiklik gerekmez.
+Model adları Variables ile değiştirilebilir: `GEMINI_MODEL`, `CLAUDE_MODEL`.
 
 ### 5. İlk çalıştırma
 Panel'de **Marka profili** sekmesini doldur → birkaç fikir ekle → Actions → **Taslak üret** → Run workflow.

@@ -1,22 +1,20 @@
 """Taslak üretici.
 
-Marka profilini, fikir havuzunu ve son paylaşımları okur; Claude ile Türkçe
-(öncelikli) ve İngilizce gönderi taslakları üretir; Supabase'e kaydeder ve
-taslakları e-postayla gönderir. Hiçbir şey onaysız yayınlanmaz.
+Marka profilini, fikir havuzunu ve son paylaşımları okur; yapay zekâ ile
+(varsayılan Gemini, istenirse Claude) Türkçe öncelikli ve İngilizce gönderi
+taslakları üretir; Supabase'e kaydeder ve e-postayla gönderir.
+Hiçbir şey onaysız yayınlanmaz.
 """
 
 import html
-import json
 import sys
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
-import anthropic
-
 from common import Supabase, env, mail_configured, send_mail
+from llm import generate_json
 
-MODEL = "claude-opus-5-5"
 X_LIMIT = 280
 
 SYSTEM_PROMPT = """Sen, bir kişinin kişisel markası için X (Twitter) gönderisi taslakları hazırlayan bir içerik editörüsün.
@@ -88,26 +86,15 @@ def build_prompt(profile, ideas, recent, count):
 
 
 def generate(profile, ideas, recent, count):
-    client = anthropic.Anthropic()
-    response = client.beta.messages.create(
-        model=MODEL,
-        max_tokens=16000,
-        betas=["server-side-fallback-2026-07-01"],
-        fallbacks="default",
-        thinking={"type": "adaptive"},
-        output_config={
-            "effort": "high",
-            "format": {"type": "json_schema", "schema": POSTS_SCHEMA},
-        },
-        system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": build_prompt(profile, ideas, recent, count)}],
-    )
-    if response.stop_reason == "refusal":
-        sys.exit("Model isteği reddetti. Marka profilini ve fikir havuzunu kontrol et.")
-    if response.stop_reason == "max_tokens":
-        sys.exit("Yanıt yarıda kesildi. DRAFT_COUNT değerini düşürmeyi dene.")
-    text = [b.text for b in response.content if b.type == "text"][-1]
-    return json.loads(text)["posts"]
+    result = generate_json(SYSTEM_PROMPT, build_prompt(profile, ideas, recent, count), POSTS_SCHEMA)
+    posts = [p for p in result.get("posts", []) if (p.get("content_tr") or "").strip()]
+    if not posts:
+        sys.exit("Model hiç taslak döndürmedi.")
+    for p in posts:
+        p.setdefault("idea_id", "")
+        p.setdefault("content_en", "")
+        p.setdefault("pillar", "")
+    return posts
 
 
 def render_email(drafts, panel_url):

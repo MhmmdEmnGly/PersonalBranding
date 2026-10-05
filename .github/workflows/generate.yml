@@ -26,10 +26,17 @@ jobs:
           cache: pip
           cache-dependency-path: engine/requirements.txt
       - run: pip install -r engine/requirements.txt
+      - name: Python sözdizimi kontrolü
+        run: python -m py_compile engine/*.py
       - name: Taslakları üret ve e-postayla gönder
         working-directory: engine
         env:
+          # Sağlayıcı: varsayılan gemini. Claude için Variables'a LLM_PROVIDER=claude ve Secrets'a ANTHROPIC_API_KEY ekle.
+          LLM_PROVIDER: ${{ vars.LLM_PROVIDER || 'gemini' }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           GMAIL_USER: ${{ secrets.GMAIL_USER }}

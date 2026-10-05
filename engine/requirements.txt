@@ -1,3 +1,4 @@
-anthropic
 requests>=2.32
 requests-oauthlib>=2.0
+# Yalnızca LLM_PROVIDER=claude iken kullanılır
+anthropic

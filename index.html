@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Marka Laboratuvarı</title>
   <meta name="description" content="Markalaşma, stratejik reklam ve PR üzerine kişisel öğrenme, uygulama ve içerik üretim sistemi.">
+  <meta name="theme-color" content="#1d1b18">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
+<body data-section="home">
   <header class="topbar">
-    <a class="brand" href="#/">Marka<span>Lab</span></a>
+    <a class="brand" href="#/"><span class="brand-mark">M</span><span class="brand-text">Marka<b>Lab</b></span></a>
     <button class="menu-toggle" aria-label="Menüyü aç" aria-expanded="false">☰</button>
     <nav class="nav" id="nav">
-      <a href="#/" data-route="home">Ana Sayfa</a>
-      <a href="#/mufredat" data-route="mufredat">Müfredat</a>
-      <a href="#/atolye" data-route="atolye">Atölye</a>
-      <a href="#/tavsiyeler" data-route="tavsiyeler">Tavsiyeler</a>
-      <a href="#/icerik-motoru" data-route="icerik-motoru">İçerik Motoru</a>
-      <a href="#/panel" data-route="panel">Panel</a>
+      <a href="#/" data-route="home"><i class="dot"></i>Yol Haritası</a>
+      <a href="#/ogren" data-route="ogren"><i class="dot"></i>Öğren</a>
+      <a href="#/atolye" data-route="uygula"><i class="dot"></i>Uygula</a>
+      <a href="#/uret" data-route="uret"><i class="dot"></i>Üret</a>
+      <a href="#/rehber" data-route="rehber"><i class="dot"></i>Rehber</a>
     </nav>
     <button class="theme-toggle" aria-label="Temayı değiştir" title="Tema">◐</button>
   </header>
@@ -28,12 +28,13 @@
   <main id="app" tabindex="-1"></main>
 
   <footer class="footer">
-    <p>Marka Laboratuvarı · Öğren → Uygula → Üret → Yayınla → Ölç</p>
-    <p class="muted">Cevapların ve notların yalnızca bu tarayıcıda saklanır. Yedek almak için Atölye sayfasındaki dışa aktarmayı kullan.</p>
+    <p>Marka Laboratuvarı · Öğren → Uygula → Üret</p>
+    <p class="muted">Cevapların, ödevlerin ve işaretlediğin görevler yalnızca bu tarayıcıda saklanır. Yedek için: Uygula → Yedekleme.</p>
   </footer>
 
   <script src="assets/js/config.js"></script>
   <script src="assets/js/data/modules.js"></script>
+  <script src="assets/js/data/roadmap.js"></script>
   <script src="assets/js/panel.js"></script>
   <script src="assets/js/app.js"></script>
 </body>
